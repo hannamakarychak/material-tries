@@ -4,8 +4,6 @@ import { Container } from '@mui/system';
 import './App.css';
 import MovieCard from './components/movie-card/movie-card';
 
-
-
 function App() {
   return (
     <div className="App">
@@ -16,7 +14,6 @@ function App() {
           <MovieCard />
           <MovieCard />
         </Grid>
-
       </Container>
 
     </div>
