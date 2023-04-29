@@ -14,6 +14,7 @@ const List = () => {
   useEffect(() => {
     // we fetch in useEffect so that data fetching does not happen with every re-render
     const fetchAllCharacters = async () => {
+      setIsLoading(true);
       try {
         const { results } = await getAllCharacters(currentPage); // json that is being returned from getAllCharacters needs to be resolved, so we add 'await' before calling
         setCharacters((currentCharacters) => [...currentCharacters, ...results]); // we set new characters with a callback so that the state is always updated and there is no need to add characters to array of dependencies
@@ -34,7 +35,7 @@ const List = () => {
     );
   }
 
-  if (isLoading) {
+  if (isLoading && currentPage === 1) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <CircularProgress />
@@ -59,9 +60,15 @@ const List = () => {
           );
         })}
       </Grid>
-      <LoadingButton variant="outlined" onClick={() => setCurrentPage((prevPage) => prevPage + 1)}>
-        load more
-      </LoadingButton>
+      <Box sx={{ textAlign: "center", margin: "24px 0" }}>
+        <LoadingButton
+          loading={isLoading}
+          variant="outlined"
+          onClick={() => setCurrentPage((prevPage) => prevPage + 1)}
+        >
+          load more
+        </LoadingButton>
+      </Box>
     </div>
   );
 };
