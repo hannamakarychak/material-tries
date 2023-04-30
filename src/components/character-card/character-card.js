@@ -4,7 +4,7 @@ import { Card, Image, Link } from "./character-card.styled";
 const CharacterCard = ({ name, location, img }) => {
   return (
     <Link href="#">
-      <Card bgColor="#DCDCDC">
+      <Card bgcolor="#DCDCDC">
         <Typography variant="h7" component="h4">
           {name}
         </Typography>

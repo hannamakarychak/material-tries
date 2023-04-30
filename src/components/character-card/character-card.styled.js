@@ -7,7 +7,7 @@ export const Image = styled.img`
 `;
 
 export const Card = styled(MuiCard)`
-  background-color: ${(props) => props.bgColor};
+  background-color: ${(props) => props.bgcolor};
   height: 100%;
   padding: 8px;
 `;

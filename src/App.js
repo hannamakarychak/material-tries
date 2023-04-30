@@ -1,7 +1,9 @@
-import { createTheme, ThemeProvider } from "@mui/material";
+import { createTheme, TextField, ThemeProvider } from "@mui/material";
 import { Container } from "@mui/system";
+import { useState } from "react";
 import ButtonAppBar from "./components/button-app-bar/button-app-bar";
 import List from "./components/list/list";
+import SearchInput from "./components/search-input/search-input";
 
 const theme = createTheme({
   components: {
@@ -26,15 +28,18 @@ const theme = createTheme({
   },
 });
 
-function App() {
+const App = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
   return (
     <ThemeProvider theme={theme}>
       <ButtonAppBar />
       <Container sx={{ marginY: 6 }}>
-        <List />
+        <SearchInput onChange={setSearchQuery} />
+        <List searchQuery={searchQuery} />
       </Container>
     </ThemeProvider>
   );
-}
+};
 
 export default App;
