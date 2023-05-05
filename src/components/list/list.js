@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { getAllCharacters } from "../../services";
 import { Box, CircularProgress, Grid } from "@mui/material";
-
-import CharacterCard from "../character-card/character-card";
 import { LoadingButton } from "@mui/lab";
+import CharacterCard from "../character-card/character-card";
+import { getAllCharacters } from "../../services";
 
-const List = ({ searchQuery }) => {
+const List = ({ searchQuery, filterValue }) => {
   const [characters, setCharacters] = useState([]);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +20,6 @@ const List = ({ searchQuery }) => {
       setIsLoading(true);
       try {
         const { results } = await getAllCharacters(currentPage, searchQuery); // json that is being returned from getAllCharacters needs to be resolved, so we add 'await' before calling
-        console.log({ results });
         setCharacters((currentCharacters) => [...currentCharacters, ...results]); // we set new characters with a callback so that the state is always updated and there is no need to add characters to array of dependencies
       } catch (error) {
         setIsError(true);

@@ -1,7 +1,8 @@
-import { createTheme, TextField, ThemeProvider } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material";
 import { Container } from "@mui/system";
 import { useState } from "react";
 import ButtonAppBar from "./components/button-app-bar/button-app-bar";
+import Filters from "./components/filters/filters";
 import List from "./components/list/list";
 import SearchInput from "./components/search-input/search-input";
 
@@ -30,13 +31,17 @@ const theme = createTheme({
 
 const App = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedGenders, setSelectedGenders] = useState([]);
+
+  console.log({ selectedGenders });
 
   return (
     <ThemeProvider theme={theme}>
       <ButtonAppBar />
       <Container sx={{ marginY: 6 }}>
         <SearchInput onChange={setSearchQuery} />
-        <List searchQuery={searchQuery} />
+        <Filters selectedValues={selectedGenders} onSelect={setSelectedGenders} />
+        <List searchQuery={searchQuery} filterValue={selectedGenders} />
       </Container>
     </ThemeProvider>
   );
