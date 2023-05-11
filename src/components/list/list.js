@@ -4,7 +4,7 @@ import { LoadingButton } from "@mui/lab";
 import CharacterCard from "../character-card/character-card";
 import { getAllCharacters } from "../../services";
 
-const List = ({ searchQuery, filterValue }) => {
+const List = ({ searchQuery, selectedGenders }) => {
   const [characters, setCharacters] = useState([]);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -13,14 +13,30 @@ const List = ({ searchQuery, filterValue }) => {
   useEffect(() => {
     setCharacters([]);
     setCurrentPage(1);
-  }, [searchQuery]); // here we clean up prev results so that we do not render all currentCharacters plus what matches query but get only those results that match search query and we start with the first page
+  }, [searchQuery, selectedGenders]); // here we clean up prev results so that we do not render all currentCharacters plus what matches query but get only those results that match search query and we start with the first page
 
   useEffect(() => {
     const fetchAllCharacters = async () => {
       setIsLoading(true);
+
       try {
-        const { results } = await getAllCharacters(currentPage, searchQuery); // json that is being returned from getAllCharacters needs to be resolved, so we add 'await' before calling
-        setCharacters((currentCharacters) => [...currentCharacters, ...results]); // we set new characters with a callback so that the state is always updated and there is no need to add characters to array of dependencies
+        if (selectedGenders.length === 0) {
+          const { results } = await getAllCharacters(currentPage, searchQuery); // json that is being returned from getAllCharacters needs to be resolved, so we add 'await' before calling
+          setCharacters((currentCharacters) => [...currentCharacters, ...results]); // we set new characters with a callback so that the state is always updated and there is no need to add characters to array of dependencies
+        } else {
+          // for await (const gender of selectedGenders) {
+          //   const { results } = await getAllCharacters(currentPage, searchQuery, gender);
+          //   setCharacters((currentCharacters) => [...currentCharacters, ...results]);
+          // }
+          const promises = selectedGenders.map((gender) =>
+            getAllCharacters(currentPage, searchQuery, gender)
+          );
+
+          console.log(promises);
+          const allResults = await Promise.all(promises); // await is used before promises when it needs to be resolved
+          const results = allResults.map(({ results }) => results).flat();
+          setCharacters((currentCharacters) => [...currentCharacters, ...results]);
+        }
       } catch (error) {
         setIsError(true);
       }
@@ -28,9 +44,7 @@ const List = ({ searchQuery, filterValue }) => {
     };
     // we fetch in useEffect so that data fetching does not happen with every re-render
     fetchAllCharacters();
-  }, [currentPage, searchQuery]);
-
-  console.log(characters);
+  }, [currentPage, searchQuery, selectedGenders]);
 
   if (isError) {
     return (

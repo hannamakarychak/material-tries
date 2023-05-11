@@ -41,7 +41,7 @@ const App = () => {
       <Container sx={{ marginY: 6 }}>
         <SearchInput onChange={setSearchQuery} />
         <Filters selectedValues={selectedGenders} onSelect={setSelectedGenders} />
-        <List searchQuery={searchQuery} filterValue={selectedGenders} />
+        <List searchQuery={searchQuery} selectedGenders={selectedGenders} />
       </Container>
     </ThemeProvider>
   );
